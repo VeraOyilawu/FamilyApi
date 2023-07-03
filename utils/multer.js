@@ -1,4 +1,4 @@
- const multer = require("multer")
+const multer = require("multer")
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -10,7 +10,7 @@ const storage = multer.diskStorage({
 });
 
 const fileFilter = (req, file, cb) => {
-    if (file.mimetype.startsWith( "image")) {
+    if (file.mimetype.startsWith("image")) {
         cb(null, true)
     } else {
         cb (new Error("image not supported"))
@@ -24,7 +24,5 @@ const upload = multer({
         limits: 1024 * 1024 * 10
     }
 })
-
-// const upload = multer({ dest: "uploads/" });
 
 module.exports = upload

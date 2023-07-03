@@ -35,7 +35,7 @@ const getProfiles = async(req, res) => {
         const profile = await familyModel.find()
          
         res.status(200).json({
-            message: "Profiles found",
+            message: "Profiles found are " + profile.length,
             data: profile
         })
     } catch (error) {
@@ -64,7 +64,7 @@ const updateProfile = async ( req, res ) => {
     const profileId = req.params.id;
     const profile = await familyModel.findById( profileId );
     try {
-        const { name, course } = req.body;
+        const {fatherName, motherName, children} = req.body;
         const bodyData = {
             fatherName: fatherName || profile.fatherName,
             motherName: motherName || profile.motherName,
@@ -79,7 +79,7 @@ const updateProfile = async ( req, res ) => {
             }
             bodyData.profileImage = req.files;
         }
-        const newProfileImage = await studentModel.findByIdAndUpdate( profileId, bodyData, { new: true } )
+        const newProfileImage = await familyModel.findByIdAndUpdate( profileId, bodyData, { new: true } )
             if ( newProfileImage ) {
                 res.status( 200 ).json( {
                     message: "Updated successfully.",
@@ -100,13 +100,13 @@ const updateProfile = async ( req, res ) => {
 // remove a profile
 const deleteProfile = async ( req, res ) => {
     const profileId = req.params.id;
-    const profile = await studentModel.findById( profileId );
+    const profile = await familyModel.findById( profileId );
     try {
             const oldProfileImagePath = `upload/${ profile.profileImage }`
             if ( fs.existsSync( oldProfileImagePath ) ) {
                 fs.unlinkSync( oldProfileImagePath )
             }
-        const deletedProfile = await studentModel.findByIdAndDelete( profileId );
+        const deletedProfile = await familyModel.findByIdAndDelete( profileId );
         if ( deletedProfile ) {
             res.status( 200 ).json( {
                 message: "Deleted successfully"
